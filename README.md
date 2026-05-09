@@ -20,6 +20,16 @@ This is an end-to-end Spring Boot application for the Iris identity-recognition 
 - Scenario buttons for general chat, authorized control, blocked control, and unverified face
 - Smoke-test script for the API flow
 
+## Output showcase
+
+Starting screen after the Spring Boot app is running:
+
+![Iris demo console starting screen](docs/images/iris-home.png)
+
+Completed pipeline after running the typed transcript demo:
+
+![Iris pipeline result with backend response](docs/images/iris-pipeline-result.png)
+
 ## Run with Maven
 
 ```powershell
