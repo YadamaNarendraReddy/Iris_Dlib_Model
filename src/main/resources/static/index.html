@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iris Assistant Demo</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="shell">
+    <section class="topbar" aria-label="Demo controls">
+        <div>
+            <p class="eyebrow">Identity-aware home assistant</p>
+            <h1>Iris demo console</h1>
+        </div>
+        <div class="status-strip">
+            <div>
+                <span class="meta-label">API</span>
+                <strong id="apiStatus">Checking</strong>
+            </div>
+            <div>
+                <span class="meta-label">Lights</span>
+                <strong id="lightStatus">OFF</strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="workspace">
+        <aside class="control-panel">
+            <div class="panel-title">
+                <span>Voice lab</span>
+                <button id="resetButton" type="button">Reset</button>
+            </div>
+
+            <section class="voice-card" aria-label="Live speech capture">
+                <button id="micButton" class="mic-button" type="button" aria-label="Start live speech pipeline">
+                    <span class="mic-stem" aria-hidden="true"></span>
+                </button>
+                <div>
+                    <span class="meta-label">Live speech-to-text</span>
+                    <strong id="voiceStatus">Ready</strong>
+                    <p id="liveTranscript">Press the pipeline button and speak.</p>
+                </div>
+            </section>
+
+            <div class="scenario-grid" aria-label="Demo scenarios">
+                <button class="scenario" type="button" data-face="mike" data-confidence="0.92"
+                        data-text="Hey Iris, how are you?">
+                    General chat
+                    <span>Mike is recognized and greeted by name.</span>
+                </button>
+                <button class="scenario" type="button" data-face="mike" data-confidence="0.94"
+                        data-text="Hey Iris, can you turn on the lights?">
+                    Authorized control
+                    <span>Mike turns the living room lights on.</span>
+                </button>
+                <button class="scenario" type="button" data-face="jake" data-confidence="0.91"
+                        data-text="Hey Iris, can you turn on the lights?">
+                    Blocked control
+                    <span>Jake is recognized but lacks appliance access.</span>
+                </button>
+                <button class="scenario" type="button" data-face="unknown" data-confidence="0.44"
+                        data-text="Hey Iris, can you turn off the lights?">
+                    Unverified face
+                    <span>Iris refuses a command below confidence threshold.</span>
+                </button>
+            </div>
+
+            <label for="transcript">Speech-to-text transcript</label>
+            <textarea id="transcript" rows="4">Hey Iris, can you turn on the lights?</textarea>
+
+            <div class="field-row">
+                <label for="faceSelect">Detected face</label>
+                <select id="faceSelect">
+                    <option value="mike">Mike</option>
+                    <option value="jake">Jake</option>
+                    <option value="iris_admin">Aisha</option>
+                    <option value="unknown">Unknown</option>
+                </select>
+            </div>
+
+            <label for="confidence">Face confidence <span id="confidenceValue">92%</span></label>
+            <input id="confidence" type="range" min="0" max="1" step="0.01" value="0.92">
+
+            <label class="check-row" for="voiceOutput">
+                <input id="voiceOutput" type="checkbox" checked>
+                Speak Iris response aloud
+            </label>
+
+            <button id="sendButton" class="primary" type="button">Run live voice pipeline</button>
+            <button id="typedButton" class="secondary" type="button">Run typed transcript</button>
+        </aside>
+
+        <section class="demo-surface" aria-label="Iris pipeline">
+            <img class="flow-asset" src="/assets/iris-flow.svg" alt="Iris pipeline from speech and face recognition to authorization and device response">
+
+            <section class="trace-panel" aria-label="Frontend and backend trace">
+                <div class="trace-step active" id="traceListen">
+                    <span>1</span>
+                    <strong>Browser listens</strong>
+                    <small>Web Speech API</small>
+                </div>
+                <div class="trace-step" id="tracePost">
+                    <span>2</span>
+                    <strong>POST backend</strong>
+                    <small>/api/interactions</small>
+                </div>
+                <div class="trace-step" id="traceBackend">
+                    <span>3</span>
+                    <strong>Iris services</strong>
+                    <small>identity + auth + prompt</small>
+                </div>
+                <div class="trace-step" id="traceSpeak">
+                    <span>4</span>
+                    <strong>Speak answer</strong>
+                    <small>browser voice output</small>
+                </div>
+            </section>
+
+            <div class="response-panel">
+                <div>
+                    <span class="meta-label">Spoken response</span>
+                    <p id="assistantResponse">Run a scenario to hear Iris respond.</p>
+                </div>
+                <button id="speakButton" class="speak-button" type="button" aria-label="Replay Iris response">
+                    <span aria-hidden="true">▶</span>
+                </button>
+                <div class="device-tile" id="deviceTile">
+                    <span class="bulb" aria-hidden="true"></span>
+                    <div>
+                        <span class="meta-label">Living room lights</span>
+                        <strong id="deviceState">OFF</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pipeline" class="pipeline" aria-live="polite"></div>
+
+            <section class="context-panel">
+                <div>
+                    <span class="meta-label">Prompt context</span>
+                    <pre id="promptPreview">Waiting for interaction...</pre>
+                </div>
+                <div>
+                    <span class="meta-label">Runtime context</span>
+                    <pre id="contextPreview">{}</pre>
+                </div>
+            </section>
+        </section>
+    </section>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>

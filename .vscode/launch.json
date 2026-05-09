@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Open Iris Demo in Browser",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:8081",
+      "webRoot": "${workspaceFolder}/src/main/resources/static",
+      "preLaunchTask": "Run Iris Assistant"
+    }
+  ]
+}
